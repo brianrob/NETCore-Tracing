@@ -35,22 +35,25 @@ namespace NETCore.Tracing
 
             foreach (IRequestHandler handler in RequestHandlerList.Handlers)
             {
-                // Build the prefix.
-                string prefix = BaseURL + handler.Prefix;
-                string prefixWithTrailingSlash = prefix + "/";
-
-                // Check for duplicate handlers.
-                if(m_Handlers.ContainsKey(prefix))
+                foreach(string handlerPrefix in handler.Prefixes)
                 {
-                    Console.WriteLine($"Ignoring handler {handler.GetType().FullName} with duplicate prefix {prefix}.");
-                    continue;
-                }
+                    // Build the prefix.
+                    string prefix = BaseURL + handlerPrefix;
+                    string prefixWithTrailingSlash = prefix + "/";
 
-                // Add the handler and prefix.
-                listener.Prefixes.Add(prefixWithTrailingSlash);
-                m_Handlers.Add(prefix, handler);
-                m_Handlers.Add(prefixWithTrailingSlash, handler);
-                Console.WriteLine($"Added handler {handler.GetType().FullName} with prefix {prefix}.");
+                    // Check for duplicate handlers.
+                    if(m_Handlers.ContainsKey(prefix))
+                    {
+                        Console.WriteLine($"Ignoring handler {handler.GetType().FullName} with duplicate prefix {prefix}.");
+                        continue;
+                    }
+
+                    // Add the handler and prefix.
+                    listener.Prefixes.Add(prefixWithTrailingSlash);
+                    m_Handlers.Add(prefix, handler);
+                    m_Handlers.Add(prefixWithTrailingSlash, handler);
+                    Console.WriteLine($"Added handler {handler.GetType().FullName} with prefix {prefix}.");
+                }
             }
         }
 

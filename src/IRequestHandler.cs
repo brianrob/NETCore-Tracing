@@ -14,9 +14,9 @@ namespace NETCore.Tracing
     public interface IRequestHandler
     {
         /// <summary>
-        /// The URL prefix to register for the handler.
+        /// The URL prefixes to register for the handler.
         /// </summary>
-        string Prefix { get; }
+        string[] Prefixes { get; }
 
         /// <summary>
         /// Handle a request.
