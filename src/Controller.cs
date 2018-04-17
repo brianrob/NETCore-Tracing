@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+
+using NETCore.Tracing.EventPipe;
 
 namespace NETCore.Tracing
 {
     internal sealed class Controller : IDisposable
     {
-        HttpListener m_Listener;
+        private const string BaseURL = "http://localhost:8080/";
+        private HttpListener m_Listener;
+        private Dictionary<string, IRequestHandler> m_Handlers = new Dictionary<string, IRequestHandler>();
 
         internal Controller()
         {
@@ -25,7 +30,28 @@ namespace NETCore.Tracing
 
         private void ConfigureListener(HttpListener listener)
         {
-            listener.Prefixes.Add("http://localhost:8080/");
+            // Add the base prefix.
+            listener.Prefixes.Add(BaseURL);
+
+            foreach (IRequestHandler handler in RequestHandlerList.Handlers)
+            {
+                // Build the prefix.
+                string prefix = BaseURL + handler.Prefix;
+                string prefixWithTrailingSlash = prefix + "/";
+
+                // Check for duplicate handlers.
+                if(m_Handlers.ContainsKey(prefix))
+                {
+                    Console.WriteLine($"Ignoring handler {handler.GetType().FullName} with duplicate prefix {prefix}.");
+                    continue;
+                }
+
+                // Add the handler and prefix.
+                listener.Prefixes.Add(prefixWithTrailingSlash);
+                m_Handlers.Add(prefix, handler);
+                m_Handlers.Add(prefixWithTrailingSlash, handler);
+                Console.WriteLine($"Added handler {handler.GetType().FullName} with prefix {prefix}.");
+            }
         }
 
         private void Listen()
@@ -44,26 +70,31 @@ namespace NETCore.Tracing
             {
                 HttpListenerContext context = m_Listener.GetContext();
                 HttpListenerRequest request = context.Request;
+                HttpListenerResponse response = context.Response;
 
-                string responseString = HandleRequest(request);
-                if(responseString == null)
+                // Ignore non-loopback requests.
+                if (!request.IsLocal)
                 {
-                    responseString = string.Empty;
+                    continue;
                 }
 
-                HttpListenerResponse response = context.Response;
-                byte[] responseBuffer = System.Text.Encoding.UTF8.GetBytes(responseString);
-                System.IO.Stream outputStream = response.OutputStream;
-                response.ContentLength64 = responseBuffer.Length;
-                outputStream.Write(responseBuffer, 0, responseBuffer.Length);
-                outputStream.Close();
+                // Handle the request.
+                FindHandlerAndExecuteRequest(request, response);                
             }
         }
 
-        private static string HandleRequest(HttpListenerRequest request)
+        private void FindHandlerAndExecuteRequest(HttpListenerRequest request, HttpListenerResponse response)
         {
-            Console.WriteLine("Handling Request");
-            return "<HTML><BODY>Hello World!</BODY><HTML>";
+            IRequestHandler handler = null;
+            if(m_Handlers.TryGetValue(request.Url.AbsoluteUri, out handler))
+            {
+                Console.WriteLine($"Handling Request to {request.Url} with handler {handler.GetType().FullName}.");
+                handler.HandleRequest(request, response);
+            }
+            else
+            {
+                Console.WriteLine($"No handler found for {request.Url}.");
+            }
         }
     }
 }
