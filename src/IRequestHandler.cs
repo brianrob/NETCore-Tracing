@@ -7,7 +7,8 @@ namespace NETCore.Tracing
     {
         public static IRequestHandler[] Handlers =
         {
-            new TraceControlRequestHandler()
+            new TraceControlRequestHandler(),
+            new TriggerGCRequestHandler()
         };
     }
 
