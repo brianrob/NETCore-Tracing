@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27601.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NETCore.Tracing", "src\Service\NETCore.Tracing.Service.csproj", "{9A027311-4B93-4E8D-B23D-B26BECD37231}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NETCore.Tracing.Service", "src\Service\NETCore.Tracing.Service.csproj", "{9A027311-4B93-4E8D-B23D-B26BECD37231}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DebugHarness", "test\DebugHarness\DebugHarness.csproj", "{F6223E97-73A0-491D-9DB2-18F76F86EE1E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NETCore.Tracing.Client", "src\Client\NETCore.Tracing.Client.csproj", "{B6C6DFED-C507-45C8-840E-7CD4050E28DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{F6223E97-73A0-491D-9DB2-18F76F86EE1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6223E97-73A0-491D-9DB2-18F76F86EE1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6223E97-73A0-491D-9DB2-18F76F86EE1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6C6DFED-C507-45C8-840E-7CD4050E28DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6C6DFED-C507-45C8-840E-7CD4050E28DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6C6DFED-C507-45C8-840E-7CD4050E28DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6C6DFED-C507-45C8-840E-7CD4050E28DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
