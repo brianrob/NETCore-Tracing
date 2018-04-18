@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using NETCore.Tracing;
 
@@ -28,6 +29,7 @@ namespace DebugHarness
             while(true)
             {
                 GC.KeepAlive(new object());
+                Thread.Sleep(1);
             }
         }
     }
