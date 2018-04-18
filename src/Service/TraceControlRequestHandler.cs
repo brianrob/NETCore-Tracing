@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using NETCore.Tracing.EventPipe;
+using NETCore.Tracing.Service.EventPipe;
 
-namespace NETCore.Tracing
+namespace NETCore.Tracing.Service
 {
     public sealed class TraceControlRequestHandler : IRequestHandler
     {

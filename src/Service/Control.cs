@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NETCore.Tracing
+namespace NETCore.Tracing.Service
 {
     public static class Control
     {

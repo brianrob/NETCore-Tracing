@@ -6,6 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../src/NETCore.Tracing.csproj" />
+    <ProjectReference Include="../../src/Service/NETCore.Tracing.Service.csproj" />
   </ItemGroup>
 </Project>

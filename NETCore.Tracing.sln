@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27601.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NETCore.Tracing", "src\NETCore.Tracing.csproj", "{9A027311-4B93-4E8D-B23D-B26BECD37231}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NETCore.Tracing", "src\Service\NETCore.Tracing.Service.csproj", "{9A027311-4B93-4E8D-B23D-B26BECD37231}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DebugHarness", "test\DebugHarness\DebugHarness.csproj", "{F6223E97-73A0-491D-9DB2-18F76F86EE1E}"
 EndProject

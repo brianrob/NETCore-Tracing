@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
-using NETCore.Tracing.EventPipe;
+using NETCore.Tracing.Service.EventPipe;
 
-namespace NETCore.Tracing
+namespace NETCore.Tracing.Service
 {
     internal sealed class Controller : IDisposable
     {

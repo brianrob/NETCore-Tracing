@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace NETCore.Tracing
+namespace NETCore.Tracing.Service
 {
     public sealed class TriggerGCRequestHandler : IRequestHandler
     {

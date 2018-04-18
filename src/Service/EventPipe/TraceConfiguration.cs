@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace NETCore.Tracing.EventPipe
+namespace NETCore.Tracing.Service.EventPipe
 {
     public sealed class TraceConfiguration
     {
