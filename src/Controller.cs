@@ -38,21 +38,20 @@ namespace NETCore.Tracing
                 foreach(string handlerPrefix in handler.Prefixes)
                 {
                     // Build the prefix.
-                    string prefix = BaseURL + handlerPrefix;
-                    string prefixWithTrailingSlash = prefix + "/";
+                    string httpListenerPrefix = BaseURL + handlerPrefix + "/";
 
                     // Check for duplicate handlers.
-                    if(m_Handlers.ContainsKey(prefix))
+                    if(m_Handlers.ContainsKey(httpListenerPrefix))
                     {
-                        Console.WriteLine($"Ignoring handler {handler.GetType().FullName} with duplicate prefix {prefix}.");
+                        Console.WriteLine($"Ignoring handler {handler.GetType().FullName} with duplicate prefix {httpListenerPrefix}.");
                         continue;
                     }
 
                     // Add the handler and prefix.
-                    listener.Prefixes.Add(prefixWithTrailingSlash);
-                    m_Handlers.Add(prefix, handler);
-                    m_Handlers.Add(prefixWithTrailingSlash, handler);
-                    Console.WriteLine($"Added handler {handler.GetType().FullName} with prefix {prefix}.");
+                    listener.Prefixes.Add(httpListenerPrefix);
+                    m_Handlers.Add("/" + handlerPrefix, handler);
+                    m_Handlers.Add("/" + handlerPrefix + "/", handler);
+                    Console.WriteLine($"Added handler {handler.GetType().FullName} with prefix {httpListenerPrefix}.");
                 }
             }
         }
@@ -89,14 +88,14 @@ namespace NETCore.Tracing
         private void FindHandlerAndExecuteRequest(HttpListenerRequest request, HttpListenerResponse response)
         {
             IRequestHandler handler = null;
-            if(m_Handlers.TryGetValue(request.Url.AbsoluteUri, out handler))
+            if(m_Handlers.TryGetValue(request.Url.AbsolutePath, out handler))
             {
                 Console.WriteLine($"Handling Request to {request.Url} with handler {handler.GetType().FullName}.");
                 handler.HandleRequest(request, response);
             }
             else
             {
-                Console.WriteLine($"No handler found for {request.Url}.");
+                Console.WriteLine($"No handler found for {request.Url} with AbsolutePath {request.Url.AbsolutePath}.");
             }
         }
     }
