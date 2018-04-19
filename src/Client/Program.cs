@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using CommandLine;
+using Newtonsoft.Json;
 
 namespace NETCore.Tracing.Client
 {
@@ -46,44 +47,48 @@ namespace NETCore.Tracing.Client
                 }
             }
 
-            if(options.CircularMB.HasValue)
+            if(options.CircularBufferMB.HasValue)
             {
                 if (argPos++ == 0)
                 {
-                    relativeUrlBuilder.Append($"?CircularMB={options.CircularMB.Value}");
+                    relativeUrlBuilder.Append($"?CircularBufferMB={options.CircularBufferMB.Value}");
                 }
                 else
                 {
-                    relativeUrlBuilder.Append($"&CircularMB={options.CircularMB.Value}");
+                    relativeUrlBuilder.Append($"&CircularBufferMB={options.CircularBufferMB.Value}");
                 }
             }
 
-            if (options.SamplingRate.HasValue)
+            if (options.SamplingRateMS.HasValue)
             {
                 if (argPos++ == 0)
                 {
-                    relativeUrlBuilder.Append($"?SamplingRate={options.SamplingRate.Value}");
+                    relativeUrlBuilder.Append($"?SamplingRateMS={options.SamplingRateMS.Value}");
                 }
                 else
                 {
-                    relativeUrlBuilder.Append($"&SamplingRate={options.SamplingRate.Value}");
+                    relativeUrlBuilder.Append($"&SamplingRateMS={options.SamplingRateMS.Value}");
                 }
             }
 
-            string response = ExecuteWebRequest(relativeUrlBuilder.ToString());
-            Console.WriteLine(response);
+            string strResponse = ExecuteWebRequest(relativeUrlBuilder.ToString());
 
-            // TODO: Get and display tracing session properties.
+            EnableTracingResponse response = JsonConvert.DeserializeObject<EnableTracingResponse>(strResponse);
+            Console.WriteLine($"Tracing Enabled: {response.TracingEnabled}");
+            Console.WriteLine($"Trace File Path: {response.OutputFilePath}");
+            Console.WriteLine($"Circular Buffer Size: {response.CircularBufferMB} MB");
+            Console.WriteLine($"Sampling Rate: {response.SamplingRateMS} ms");
             return 0;
         }
 
         private static int DisableTracing(DisableTracingOptions options)
         {
             string relativeUrl = "/TraceControl/Disable";
-            string response = ExecuteWebRequest(relativeUrl);
-            Console.WriteLine(response);
+            string strResponse = ExecuteWebRequest(relativeUrl);
 
-            // TODO: Get and display the trace file location.
+            DisableTracingResponse response = JsonConvert.DeserializeObject<DisableTracingResponse>(strResponse);
+            Console.WriteLine($"Tracing Enabled: {response.TracingEnabled}");
+            Console.WriteLine($"Trace File Path: {response.OutputFilePath}");
             return 0;
         }
 
@@ -94,17 +99,16 @@ namespace NETCore.Tracing.Client
 
             // Build the relative URL to hit.
             string relativeUrl = $"/TriggerGC/{generation}";
-            string response = ExecuteWebRequest(relativeUrl);
-            Console.WriteLine(response);
+            string strResponse = ExecuteWebRequest(relativeUrl);
 
+            TriggerGCResponse response = JsonConvert.DeserializeObject<TriggerGCResponse>(strResponse);
+            Console.WriteLine($"Triggered Gen{response.GCGeneration} GC.");
             return 0;
         }
 
         private static string ExecuteWebRequest(string relativeUrl)
         {
             string targetUrl = BaseUrl + relativeUrl;
-            Console.WriteLine($"RequestURL = {targetUrl}");
-
             using (HttpClient client = new HttpClient())
             {
                 string response = null;

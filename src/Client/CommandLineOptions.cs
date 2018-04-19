@@ -12,19 +12,11 @@ namespace NETCore.Tracing.Client
         [Option("Providers", HelpText = "A set of comma-delimited provider configurations.  For example: Microsoft-Windows-DotNETRuntime:0xFFFFFFFFFFFFFFFF:5,...")]
         public string Providers { get; set; }
 
-        [Option("CircularMB", HelpText = "The size in megabytes of the circular buffer.")]
-        public uint? CircularMB { get; set; }
+        [Option("CircularBufferMB", HelpText = "The size in megabytes of the circular buffer.")]
+        public uint? CircularBufferMB { get; set; }
 
-        [Option("SamplingRate", HelpText = "The sampling rate of the sample-based profiler.")]
-        public uint? SamplingRate { get; set; }
-
-        public bool ArgumentsSpecified()
-        {
-            return !(string.IsNullOrEmpty(OutputFileName) &&
-                     string.IsNullOrEmpty(Providers) &&
-                     !CircularMB.HasValue &&
-                     !SamplingRate.HasValue);
-        }
+        [Option("SamplingRateMS", HelpText = "The sampling rate of the sample-based profiler in milliseconds.")]
+        public uint? SamplingRateMS { get; set; }
     }
 
     [Verb("DisableTracing", HelpText = "Disable EventPipe tracing functionality.")]
