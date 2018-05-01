@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.0.0" />
+    <ProjectReference Include="../Service/NETCore.Tracing.Service.csproj" />
+  </ItemGroup>
+
+  <Target Name="CopyTarget" AfterTargets="Build">
+    <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+      <USERPROFILE>$(HOME)</USERPROFILE>
+  </PropertyGroup>
+
+    <Message Importance="High" Text="Creating directory for NETCore.Tracing.Service if it doesn't exist" />
+    <MakeDir Directories="$(USERPROFILE)\.dotnet\store\x64\netcoreapp2.0\NETCore.Tracing.Service\1.0.0\lib\netcoreapp2.0\" 
+             Condition="!Exists('$(USERPROFILE)\.dotnet\store\x64\netcoreapp2.0\NETCore.Tracing.Service\1.0.0\lib\netcoreapp2.0\')" />
+
+    <Message Importance="High" Text="Installing NETCore.Tracing.Service" />
+    <!-- Move the assembly to the user profile's runtime store -->
+    <Copy SourceFiles="$(OutputPath)NETCore.Tracing.Service.dll" DestinationFolder="$(USERPROFILE)\.dotnet\store\x64\netcoreapp2.0\NETCore.Tracing.Service\1.0.0\lib\netcoreapp2.0\" />
+
+    <Message Importance="High" Text="Creating directory for NETCore.Tracing.Service symbols if it doesn't exist" />
+    <MakeDir Directories="$(USERPROFILE)\.dotnet\store\symbols\netcoreapp2.0\NETCore.Tracing.Service\1.0.0\lib\netcoreapp2.0\" 
+             Condition="!Exists('$(USERPROFILE)\.dotnet\store\symbols\netcoreapp2.0\NETCore.Tracing.Service\1.0.0\lib\netcoreapp2.0\')" />
+
+    <Message Importance="High" Text="Installing NETCore.Tracing.Service symbols" />
+    <!-- Move the symbols to the user profile's runtime store -->
+    <Copy SourceFiles="$(OutputPath)NETCore.Tracing.Service.pdb" DestinationFolder="$(USERPROFILE)\.dotnet\store\symbols\netcoreapp2.0\NETCore.Tracing.Service\1.0.0\lib\netcoreapp2.0\" />
+
+    <Message Importance="High" Text="Creating directory for NETCore.Tracing.Service.ASPNET if it doesn't exist" />
+    <MakeDir Directories="$(USERPROFILE)\.dotnet\store\x64\netcoreapp2.0\NETCore.Tracing.Service.ASPNET\1.0.0\lib\netcoreapp2.0\" 
+             Condition="!Exists('$(USERPROFILE)\.dotnet\store\x64\netcoreapp2.0\NETCore.Tracing.Service.ASPNET\1.0.0\lib\netcoreapp2.0\')" />
+
+    <Message Importance="High" Text="Installing NETCore.Tracing.Service.ASPNET" />
+    <!-- Move the assembly to the user profile's runtime store -->
+    <Copy SourceFiles="$(OutputPath)NETCore.Tracing.Service.ASPNET.dll" DestinationFolder="$(USERPROFILE)\.dotnet\store\x64\netcoreapp2.0\NETCore.Tracing.Service.ASPNET\1.0.0\lib\netcoreapp2.0\" />
+
+    <Message Importance="High" Text="Creating directory for NETCore.Tracing.Service.ASPNET symbols if it doesn't exist" />
+    <MakeDir Directories="$(USERPROFILE)\.dotnet\store\symbols\netcoreapp2.0\NETCore.Tracing.Service.ASPNET\1.0.0\lib\netcoreapp2.0\" 
+             Condition="!Exists('$(USERPROFILE)\.dotnet\store\symbols\netcoreapp2.0\NETCore.Tracing.Service.ASPNET\1.0.0\lib\netcoreapp2.0\')" />
+
+    <Message Importance="High" Text="Installing NETCore.Tracing.Service.ASPNET symbols" />
+    <!-- Move the symbols to the user profile's runtime store -->
+    <Copy SourceFiles="$(OutputPath)NETCore.Tracing.Service.ASPNET.pdb" DestinationFolder="$(USERPROFILE)\.dotnet\store\symbols\netcoreapp2.0\NETCore.Tracing.Service.ASPNET\1.0.0\lib\netcoreapp2.0\" />
+
+    <Message Importance="High" Text="Modifying deps.json file" />
+    <Copy SourceFiles="$(OutputPath)NETCore.Tracing.Service.ASPNET.deps.json" DestinationFiles="$(OutputPath)NETCore.Tracing.Service.ASPNET.deps.json.modified" />
+    <Exec Condition="'$(OS)' != 'Windows_NT'" Command="./update-deps.sh $(OutputPath)NETCore.Tracing.Service.ASPNET.deps.json.modified" />
+
+    <Message Importance="High" Text="Creating directory for NETCore.Tracing.Service.ASPNET.deps.json file if it doesn't exist" />
+    <MakeDir Directories="$(USERPROFILE)\.dotnet\x64\additionalDeps\NETCore.Tracing.Service.ASPNET\shared\Microsoft.NETCore.App\2.0.0\" 
+             Condition="!Exists('$(USERPROFILE)\.dotnet\x64\additionalDeps\NETCore.Tracing.Service.ASPNET\shared\Microsoft.NETCore.App\2.0.0\')" />
+
+    <Message Importance="High" Text="Installing NETCore.Tracing.Service.ASPNET.deps.json file" />
+    <Copy SourceFiles="$(OutputPath)NETCore.Tracing.Service.ASPNET.deps.json.modified" DestinationFiles="$(USERPROFILE)\.dotnet\x64\additionalDeps\NETCore.Tracing.Service.ASPNET\shared\Microsoft.NETCore.App\2.0.0\NETCore.Tracing.Service.ASPNET.deps.json" />
+  </Target>
+
+</Project>
